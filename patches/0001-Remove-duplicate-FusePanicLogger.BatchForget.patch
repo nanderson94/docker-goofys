@@ -1,0 +1,37 @@
+From 4bd9fb2e6899a1cbe561954e7d3a2ba427c6168c Mon Sep 17 00:00:00 2001
+From: Nic Anderson <nic@nic-a.net>
+Date: Thu, 13 Apr 2023 01:00:57 -0400
+Subject: [PATCH] Remove duplicate FusePanicLogger.BatchForget
+
+Corrects the following issue:
+
+```
+\# github.com/kahing/goofys/api/common
+api/common/panic_logger.go:69:27: method FusePanicLogger.BatchForget already declared at api/common/panic_logger.go:41:27
+```
+
+Provided upstream via kahing/goofys/pull/748, but still pending merge.
+
+Signed-off-by: Nic Anderson <nic@nic-a.net>
+---
+ api/common/panic_logger.go | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/api/common/panic_logger.go b/api/common/panic_logger.go
+index 4f23603..3c710df 100644
+--- a/api/common/panic_logger.go
++++ b/api/common/panic_logger.go
+@@ -66,10 +66,6 @@ func (fs FusePanicLogger) ForgetInode(ctx context.Context, op *fuseops.ForgetIno
+ 	defer LogPanic(&err)
+ 	return fs.Fs.ForgetInode(ctx, op)
+ }
+-func (fs FusePanicLogger) BatchForget(ctx context.Context, op *fuseops.BatchForgetOp) (err error) {
+-	defer LogPanic(&err)
+-	return fs.Fs.BatchForget(ctx, op)
+-}
+ func (fs FusePanicLogger) MkDir(ctx context.Context, op *fuseops.MkDirOp) (err error) {
+ 	defer LogPanic(&err)
+ 	return fs.Fs.MkDir(ctx, op)
+-- 
+2.40.0
+
